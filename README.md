@@ -10,7 +10,7 @@ This project shows you a High Level picture of a project and gives you clues abo
 work with is about. Think of this like a long index listing or a skeleton of an application. Once you know what the application is about
 you can deep dive right into the right portions of the code and work with it.
 
-####Features
+#### Features
 This is what you can see on a Package level:
 - Files used in this package and details of
     - Number of lines
@@ -20,7 +20,7 @@ This is what you can see on a Package level:
     - Public and private methods on them with their method signatures
 - Functions list (Public / Private) with number of lines count    
         
-####Installing
+#### Installing
 you can clone this code and just run: <br/>
 `go install golook.go`
 
