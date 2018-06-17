@@ -1,0 +1,296 @@
+
+func loadFolder(a string) () {
+
+	fset := token.NewFileSet()
+
+	filter := func(f os.FileInfo) (ret bool) {
+
+		ret = true
+
+		if showTestFiles == false {
+			ret = strings.HasSuffix(f.Name(), "_test.go") == false
+		}
+
+		return
+	}
+
+	var recur []map[string]*ast.Package
+
+	pkgs, err := parser.ParseDir(fset, a, filter, parser.ParseComments)
+	if err != nil {
+		panic(err)
+	}
+
+	recur = append(recur, pkgs)
+
+	// Loop over the packages that we got in this folder
+	for pkgn, pkg := range pkgs {
+
+		var tmFunc Funcs
+		tmFunc.Methods = make(map[string][]FuncInfo)
+		tmFunc.Structs = make(map[string]FuncInfo)
+		tmImports := make(map[string]struct{})
+
+		// Loop over all the files
+		for _, vv := range pkg.Files {
+
+			fnFull := fset.File(vv.Pos()).Name()
+			pt, fn := path.Split(fnFull)
+			lc := fset.File(vv.Pos()).LineCount()
+			sz := fset.File(vv.Pos()).Size()
+
+			curFile := FuncInfo{
+				Type: "file",
+				NumberLines: lc,
+				Size : sz,
+				Filename: fn,
+				Name: fnFull,
+				FileLocation: pt,
+				Package: pkg.Name,
+			}
+
+			b, err := ioutil.ReadFile(fnFull)
+			if err != nil {
+				fmt.Println("File error", pt, fn, err)
+			}
+
+			farr := strings.Split(string(b), "\n")
+
+			for _, v := range vv.Decls {
+				switch v.(type) {
+
+				case *ast.FuncDecl:
+					var isMethod bool
+					var strName string
+
+					st := fset.File(v.(*ast.FuncDecl).Pos()).Line(v.(*ast.FuncDecl).Pos())
+					en := fset.File(v.(*ast.FuncDecl).Pos()).Line(v.(*ast.FuncDecl).End())
+					sz := (en - st) + 1
+
+					fd := v.(*ast.FuncDecl)
+					fc := fd.Name.Name[:1]
+					funcName := fd.Name.Name
+					isPublic := fc == strings.ToUpper(fc)
+
+					if fd.Recv != nil && len(fd.Recv.List) > 0 {
+
+						if _, ok := (fd.Recv.List[0].Type).(*ast.StarExpr); ok {
+							strName = fmt.Sprintf("%v", (fd.Recv.List[0].Type).(*ast.StarExpr).X)
+						} else {
+							strName = fmt.Sprintf((fd.Recv.List[0].Type).(*ast.Ident).Name)
+						}
+
+						isMethod = true
+					}
+
+					fn := FuncInfo {
+						Name:       funcName,
+						Type:       "function",
+						Content:    retLine(farr, fset.Position(v.Pos()).Line-1),
+						IsPublic:   isPublic,
+						Package:    pkg.Name,
+						Filename:   fn,
+						IsMethod:   isMethod,
+						StructName: strName,
+						NumberLines: sz	}
+
+					for _, b := range fd.Body.List {
+						fmt.Println("This is b", b)
+					}
+
+					if isMethod {
+
+						tmFunc.Methods[strName] = append(tmFunc.Methods[strName], fn)
+						curFile.MethodsCount += 1
+
+						if isPublic {
+
+							curFile.PublicMethodsCount += 1
+						} else {
+
+							curFile.PrivateMethodsCount += 1
+						}
+
+					} else {
+
+						curFile.FunctionsCount += 1
+
+						if isPublic {
+
+							curFile.PublicFuncCount += 1
+							tmFunc.PublicFunctions = append(tmFunc.PublicFunctions, fn)
+						} else {
+
+							curFile.PrivateFuncCount += 1
+							tmFunc.PrivateFunctions = append(tmFunc.PrivateFunctions, fn)
+						}
+					}
+
+				case *ast.GenDecl:
+
+					switch v.(*ast.GenDecl).Tok {
+
+					case token.TYPE:
+
+						nm := v.(*ast.GenDecl).Specs[0].(*ast.TypeSpec).Name.Name
+
+						var st, en int
+						var con string
+
+						st = (fset.Position(v.Pos()).Line - 1)
+						en = (fset.Position(v.End()).Line)
+						sz = en - st
+
+						if v.Pos() != v.End() {
+
+							con = strings.Join(retLines(farr, st, en), "\n")
+						} else {
+							st = (fset.Position(v.Pos()).Line - 1)
+							con = retLine(farr, st)
+						}
+
+						isPublic := nm[:1] == strings.ToUpper(nm[:1])
+
+						if isPublic {
+
+							curFile.PublicStructCount += 1
+						} else {
+
+							curFile.PrivateStructCount += 1
+						}
+
+						fn := FuncInfo{
+							Name:     nm,
+							Type:     "struct",
+							Content:  con,
+							IsPublic: isPublic,
+							Package:  pkg.Name,
+							Filename: fn,
+							NumberLines: sz,
+						}
+
+						tmFunc.Structs[nm] = fn
+						curFile.StructsCount += 1
+
+					case token.IMPORT:
+
+						for _, vv := range v.(*ast.GenDecl).Specs {
+							tmImports[vv.(*ast.ImportSpec).Path.Value] = struct{}{}
+							curFile.ImportsCount += 1
+						}
+
+					case token.VAR:
+						for _, vv := range v.(*ast.GenDecl).Specs {
+
+							j := vv.(*ast.ValueSpec)
+							fmt.Println(j)
+						}
+
+					case token.CONST:
+
+					default:
+						fmt.Println("General Declaration : ", v.(*ast.GenDecl).Tok)
+					}
+
+				default:
+					fmt.Println("V.type : ", reflect.TypeOf(v))
+				}
+			}
+
+			for _, v := range vv.Scope.Objects {
+
+				switch v.Kind.String() {
+				case "func":
+
+				}
+			}
+
+			FileList = append(FileList, curFile)
+		}
+
+		var gh, ngh []string
+
+		for kk, _ := range tmImports {
+
+			if strings.Contains(kk, "github.com") {
+				gh = append(gh, strings.TrimSpace(kk))
+			} else {
+				ngh = append(ngh, strings.TrimSpace(kk))
+			}
+		}
+
+		sort.Strings(gh)
+		sort.Strings(ngh)
+
+		for _, v := range gh {
+			tmFunc.Imports = append(tmFunc.Imports, v)
+		}
+
+		for _, v := range ngh {
+			tmFunc.Imports = append(tmFunc.Imports, v)
+		}
+
+		sort.Sort(ByLineCount(tmFunc.PublicFunctions))
+		sort.Sort(ByLineCount(tmFunc.PrivateFunctions))
+		sort.Sort(ByLineCount(FileList))
+
+		pkgInfo[ pkgn ] = tmFunc
+	}
+}
+
+
+
+type FuncInfo struct {
+	Name        string
+	Type        string
+	Content     string
+	IsPublic    bool
+	Filename    string
+	Package     string
+	AstFile     *ast.File
+	IsMethod    bool
+	StructName  string
+	NumberLines int
+
+	FileName     string
+	FileLocation string
+	Size         int
+
+	StructsCount       int
+	PublicStructCount  int
+	PrivateStructCount int
+
+	MethodsCount        int
+	FunctionsCount      int
+	PublicFuncCount     int
+	PrivateFuncCount    int
+	PublicMethodsCount  int
+	PrivateMethodsCount int
+
+	ImportsCount int
+}
+
+
+
+
+
+
+func loadFolderV2(a string) () {
+
+	// Setup the stuff
+	fileSet := token.NewFileSet()
+
+	var recur []map[string]*ast.Package
+
+	// Get the packages in the directory
+	pkgs, err := parser.ParseDir(fileSet, a, filesFilterFunc, parser.ParseComments)
+	if err != nil {
+		panic(err)
+	}
+
+	recur = append(recur, pkgs)
+
+	//for _, pkg := range pkgs {
+	//	ast.Walk(VisitorFunc(FindTypes), pkg)
+	//}
+	//return
