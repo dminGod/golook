@@ -3,6 +3,7 @@ package main
 import (
 	"go/ast"
 	"go/token"
+	"sort"
 )
 
 type Application struct {
@@ -34,6 +35,12 @@ type PackageInfo struct {
 	ChildFuncs   []*FuncInfo
 }
 
+func (p *PackageInfo) SortFiles(){
+	sort.SliceStable(p.ChildFiles, func(i int, j int) (bool){
+		return p.ChildFiles[i].NumberLines > p.ChildFiles[j].NumberLines
+	})
+}
+
 type FileInfo struct {
 
 	Name         string
@@ -43,16 +50,22 @@ type FileInfo struct {
 	NumberLines  int
 	Size         int
 
-	Lines 		[]string
+	Structs 	[]*StructInfo
+	Methods     []*MethodInfo
+	Funcs       []*FuncInfo
 
+	Lines 		[]string
 	PackageInfo *PackageInfo
 	AstPackage  *ast.Package
 	Application *Application
 }
 
 type MethodInfo struct {
+
 	Name    string
 	Content string
+	StructName  string
+
 	Role    ComponentType
 
 	NumberLines int
@@ -75,6 +88,7 @@ type FuncInfo struct {
 }
 
 type StructInfo struct {
+
 	Name    string
 	Content string
 	Role    ComponentType

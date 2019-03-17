@@ -1,14 +1,18 @@
 package main
 
+
 type Component interface {
+
 	GetRole() ComponentType
 	GetStats() map[ComponentType]int
 }
 
 type ComponentType int
 
+// Types of Components found in the application
 const (
 	_                                 = iota
+
 	ApplicationCompType ComponentType = iota
 	PackageCompType
 	FileCompType

@@ -9,11 +9,15 @@ import (
 )
 
 
+// General filter to exclude some time of files if you want
+// Currently removes _test.go files if they are specified
+
 func filesFilterFunc(f os.FileInfo) (ret bool) {
 
 	ret = true
 
 	if showTestFiles == false {
+
 		ret = strings.HasSuffix(f.Name(), "_test.go") == false
 	}
 
@@ -21,7 +25,9 @@ func filesFilterFunc(f os.FileInfo) (ret bool) {
 }
 
 // Take the imports, sort them and add them as : github then the non github
-func SortReturnImports(imports map[string]struct{})(ret []string){
+// Why is this not used?
+
+func SortReturnImports(imports map[string]struct{})(ret []string) {
 
 	var gh, ngh []string
 
@@ -46,6 +52,8 @@ func SortReturnImports(imports map[string]struct{})(ret []string){
 
 return
 }
+
+// Why is this not used..?
 
 func FindTypes(v ast.Node) ast.Visitor {
 

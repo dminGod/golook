@@ -9,6 +9,7 @@ import (
 	"go/token"
 	"io/ioutil"
 	"go/parser"
+	"sort"
 )
 
 func NewApplication(baseFolder string) (RetApp Application) {
@@ -36,8 +37,21 @@ func ParsePackage(a *Application, fileSet *token.FileSet, folder string, pkg *as
 		retPkg.ChildFiles = append(retPkg.ChildFiles, tmFile)
 	}
 
+	// TODO: Map the methods and structs here
+
 	return
 }
+
+func (a *Application) SortPackages() {
+
+	sort.SliceStable(a.ChildPackages, func(i int, j int) (bool){
+		return a.ChildPackages[i].GetLinesInPkg() > a.ChildPackages[j].GetLinesInPkg()
+	})
+
+	return
+}
+
+
 
 func FetchApp(dir string) (RetApp Application) {
 
@@ -51,9 +65,10 @@ func (a *Application) ReadApp() (err error) {
 
 	for _, folder := range a.SubFolders {
 
-		// Setup the stuff
+		// Create a new fileset
 		fileSet := token.NewFileSet()
 
+		// Make a list of packages that are part of this SubFolder
 		pkgs := make(map[string]*ast.Package)
 
 		// Get the packages in the directory
@@ -67,15 +82,25 @@ func (a *Application) ReadApp() (err error) {
 			tmpPkg := ParsePackage(a, fileSet, folder, pkg)
 
 			for _, file := range tmpPkg.ChildFiles {
+
 				a.ChildFiles = append(a.ChildFiles, file)
 			}
 
 			for _, str := range tmpPkg.ChildStructs {
+
 				a.ChildStructs = append(a.ChildStructs, str)
 			}
 
 			for _, mthd := range tmpPkg.ChildMethods {
-				a.ChildMethods = append(a.ChildMethods, mthd)
+
+				for _, str := range tmpPkg.ChildStructs {
+
+					if mthd.StructName == str.Name {
+						mthd.Stuct = str
+					}
+				}
+
+				a.ChildMethods = append( a.ChildMethods, mthd )
 			}
 
 			for _, fun := range tmpPkg.ChildFuncs {
@@ -89,6 +114,16 @@ func (a *Application) ReadApp() (err error) {
 	return
 }
 
+
+func (p *PackageInfo) GetLinesInPkg() (lns int){
+
+	for _, f := range p.ChildFiles {
+
+		lns += f.NumberLines
+	}
+
+	return
+}
 
 func LoadFile(pkgInfo *PackageInfo, f *ast.File) (file *FileInfo) {
 
@@ -140,13 +175,15 @@ func (f *FileInfo) Parse() {
 			funcName := fd.Name.Name
 			isPublic := fc == strings.ToUpper(fc)
 
+			strName := ""
+
 			if fd.Recv != nil && len(fd.Recv.List) > 0 {
 
-				//if _, ok := (fd.Recv.List[0].Type).(*ast.StarExpr); ok {
-				//	strName = fmt.Sprintf("%v", (fd.Recv.List[0].Type).(*ast.StarExpr).X)
-				//} else {
-				//	strName = fmt.Sprintf((fd.Recv.List[0].Type).(*ast.Ident).Name)
-				//}
+				if _, ok := (fd.Recv.List[0].Type).(*ast.StarExpr); ok {
+					strName = fmt.Sprintf("%v", (fd.Recv.List[0].Type).(*ast.StarExpr).X)
+				} else {
+					strName = fmt.Sprintf((fd.Recv.List[0].Type).(*ast.Ident).Name)
+				}
 
 				isMethod = true
 			}
@@ -170,12 +207,15 @@ func (f *FileInfo) Parse() {
 					Package:     f.PackageInfo,
 					File:        f,
 
-					// TODO: Struct referece:
+					StructName: strName,
+
+					// TODO : Get the struct reference too -- maybe after parsing everything
 					//Stuct:
 					Role:        tmRole,
 					NumberLines: sz,
 				}
 
+				f.Methods = append(f.Methods, &meth)
 				f.PackageInfo.ChildMethods = append(f.PackageInfo.ChildMethods, &meth)
 
 			} else {
@@ -195,6 +235,7 @@ func (f *FileInfo) Parse() {
 					NumberLines: sz,
 				}
 
+				f.Funcs = append(f.Funcs, &fun)
 				f.PackageInfo.ChildFuncs = append(f.PackageInfo.ChildFuncs, &fun)
 			}
 
@@ -238,7 +279,7 @@ func (f *FileInfo) Parse() {
 
 					}
 
-
+				f.Structs = append(f.Structs, &str)
 				f.PackageInfo.ChildStructs = append(f.PackageInfo.ChildStructs, &str)
 
 			case token.IMPORT:

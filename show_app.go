@@ -6,11 +6,26 @@ import (
 	"encoding/json"
 )
 
+func StartUI() {
+
+	r := gin.Default()
+
+	r.GET("/show_app", showApp )
+	r.GET("/json_file_size", jsonFS )
+	r.GET("/json_pkg_size", jsonPackageSize )
+	r.GET("/json_func_count", jsonMethodFuncs )
+
+	r.Static("/static", "./static")
+	r.Run("0.0.0.0:8081") // listen and serve on 0.0.0.0:8080
+}
+
 func showApp(c *gin.Context) {
 
 	var ret string
 
 	ret = "<html><body>"
+
+	app.SortPackages()
 
 	for _, pkgs := range app.ChildPackages {
 
@@ -18,9 +33,11 @@ func showApp(c *gin.Context) {
 <h3 class="package_h3">%v</h3>
 <div class="package_header">
 Folder: %v <br/>
+Lines: %v  <br/>
 Child Files: %v - Funcs : %v - Methods: %v </div>`,
 			pkgs.Name,
 			pkgs.FolderLocation,
+			pkgs.GetLinesInPkg(),
 			len(pkgs.ChildFiles),
 			len(pkgs.ChildFuncs),
 			len(pkgs.ChildMethods),
@@ -28,7 +45,9 @@ Child Files: %v - Funcs : %v - Methods: %v </div>`,
 
 		ret += `<div class="file_details">`
 
+		pkgs.SortFiles()
 		for _, file := range pkgs.ChildFiles {
+
 			ret += fmt.Sprintf("<b>%v</b> File: %v </br>", file.Name, file.NumberLines)
 		}
 
@@ -39,6 +58,9 @@ Child Files: %v - Funcs : %v - Methods: %v </div>`,
 
 	c.Writer.Write([]byte(ret))
 }
+
+
+
 
 
 type JsonOut struct {
