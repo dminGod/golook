@@ -20,14 +20,14 @@ Couple of examples of what it looks like:
 Now when you visit : http://127.0.0.1:8081/static/html   
 
 You will see something like this: 
-![docker example](https://raw.githubusercontent.com/dminGod/golook/static/example.jpg)
+![docker example](https://raw.githubusercontent.com/dminGod/golook/master/static/example.jpg)
 
 
 
 `builds\golook.exe --dir c:\go_code\src\github.com\kubernetes\kubernetes`
 
 Kubernetes:
-![docker example](https://raw.githubusercontent.com/dminGod/golook/static/example_kube.jpg)
+![kubernetes example](https://raw.githubusercontent.com/dminGod/golook/master/static/example_kube.jpg)
 
 
 
