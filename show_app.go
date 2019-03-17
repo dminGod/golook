@@ -22,9 +22,6 @@ func StartUI() {
 func showApp(c *gin.Context) {
 
 	var ret string
-
-	ret = "<html><body>"
-
 	app.SortPackages()
 
 	for _, pkgs := range app.ChildPackages {
