@@ -1,33 +1,58 @@
 # golook
-golook on any go application code directory to get stats a high level look of the code.
 
-This is an application that will show you stats about a golang project - like line count -- number of functions, structs etc.
+golook is meant to show you a high level view of any golang project. It gives you crude details that can let you decide
+where to sink your teeth into the project. Its like skimming over a book before starting to read it.
 
-Though golang has godoc that shows you details of a project that are Public but if you want to start contributing to some project 
-and want to learn what it really does internally this is a good place to start.
+The reason I made this is to get a feel for very large projects like Kubernetes and Docker and to make sense of where the
+code was written and what the scope of the project was.  
 
-This project shows you a High Level picture of a project and gives you clues about what the application you are trying to 
-work with is about. Think of this like a long index listing or a skeleton of an application. Once you know what the application is about
-you can deep dive right into the right portions of the code and work with it.
+For any golang project you can get high level stats like:
+- Packages sorted by number of lines of code.
+- How many Functions, Methods and Structs are in that package.
+- A sorted list of files in that package and how many lines of code exist in each of them.
 
-#### Features
-This is what you can see on a Package level:
-- Files used in this package and details of
-    - Number of lines
-    - Counts of Functions, Structs & Methods defined
-    - Breakdown of Public / Private   
-- Struct definitions
-    - Public and private methods on them with their method signatures
-- Functions list (Public / Private) with number of lines count    
+
+Couple of examples of what it looks like:
+
+
+`builds\golook.exe --dir c:\go_code\src\github.com\docker\engine`
+
+Now when you visit : http://127.0.0.1:8081/static/html   
+
+You will see something like this: 
+![docker example](https://raw.githubusercontent.com/dminGod/golook/static/example.jpg)
+
+
+
+`builds\golook.exe --dir c:\go_code\src\github.com\kubernetes\kubernetes`
+
+Kubernetes:
+![docker example](https://raw.githubusercontent.com/dminGod/golook/static/example_kube.jpg)
+
+
+
+- The application uses gin to serve the web pages
+- There is also a command line option that is currently disabled that shows the actual structs and lets you see and hide a bunch of information like counts of public, private methods, details of Imports etc.
+
         
 #### Installing
-you can clone this code and just run: <br/>
-`go install golook.go`
 
-Now you will be able to run golook from anywhere.<br/>
-`golook` 
+Assuming you have a golang setup already.
 
-The application takes the current working directory as the starting point and then recursively parses all folders for go files.
+- In your src/github.com folder create a folder for dminGod
+- Clone the code from here into this folder using 
 
-It leverages the native golang ast to parse the files.
-    
+`git clone https://github.com/dminGod/golook.git`
+  
+- Build the app using: 
+
+`go get`
+
+`go build -o goolook *.go`
+
+You can now call the binary using :
+`golook --dir {{path to the project you want to analyze}}`
+
+
+
+**I will be pushing the binaries to release soon, that will let you skip the build step**  
