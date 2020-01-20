@@ -16,10 +16,10 @@ func filesFilterFunc(f os.FileInfo) (ret bool) {
 
 	ret = true
 
-	if showTestFiles == false {
-
-		ret = strings.HasSuffix(f.Name(), "_test.go") == false
-	}
+	//if showTestFiles == false {
+	//
+	//	ret = strings.HasSuffix(f.Name(), "_test.go") == false
+	//}
 
 	return
 }

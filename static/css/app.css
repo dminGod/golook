@@ -1,0 +1,77 @@
+
+h3.package_h3 {
+    color: #005cbf;
+    margin-top : 15px;
+}
+
+div.package_header {
+    background-color: #0b2e13;
+    color: white;
+    font-size: 14px;
+    padding: 6px;
+}
+
+div.file_details {
+    font-size: 12px;
+}
+
+form {
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+svg {
+    font: 10px sans-serif;
+}
+
+/* toltipcontainer */
+.toltip{
+    position: relative;
+    display: inline-block;
+}
+
+/* toltiptext */
+.toltip .tooltiptext {
+    visibility: hidden;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 5px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    /* Position the toltiptext */
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+
+    /* Fade in toltip*/
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+.cnt {
+
+    text-align: center;
+}
+
+
+/* toltiparrow */
+.toltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+/* Show the toltiptext when you mouse over the toltipcontainer */
+.toltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}

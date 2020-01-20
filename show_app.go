@@ -4,23 +4,117 @@ import (
 	"github.com/gin-gonic/gin"
 	"fmt"
 	"encoding/json"
+	"net/url"
+	"path"
+	"strings"
+	"time"
 )
 
 func StartUI() {
 
 	r := gin.Default()
-
 	r.GET("/show_app", showApp )
+	r.GET("/load_dirs", loadDirs )
+	r.GET("/get_package_graph", getPkgGraph )
+
 	r.GET("/json_file_size", jsonFS )
 	r.GET("/json_pkg_size", jsonPackageSize )
 	r.GET("/json_func_count", jsonMethodFuncs )
 
 	r.Static("/static", "./static")
+
 	r.Run("0.0.0.0:8081") // listen and serve on 0.0.0.0:8080
+
+}
+
+type PkgImports struct {
+
+	Data []PkgNames	`json:"data"`
+	Links []Links	`json:"links"`
+}
+
+type PkgNames struct {
+
+	ID int			`json:"id"`
+	Value int  		`json:"value"`
+	Label string  	`json:"label"`
+
+	CountFiles int   `json:"files_count"`
+	CountFuncs int   `json:"funcs_count"`
+	CountInterfaces int `json:"interface_count"`
+	CountStructs int `json:"structs_count"`
+	CountMethods int `json:"methods_count"`
+	CountImports int `json:"imports_count"`
+}
+
+type Links struct {
+
+	From int	`json:"from"`
+	To   int 	`json:"to"`
+	Arrows string `json:"arrows"`
+}
+
+func getPkgGraph(c *gin.Context){
+
+	d := c.Query("dir")
+	app = FetchApp( d )
+
+	var pi PkgImports
+
+	piSt := make(map[string]interface{})
+	uqLinks := make(map[string]Links)
+
+	for i, v := range app.ChildPackages {
+		pi.Data = append(pi.Data, PkgNames{
+			ID: i, Value: v.GetLinesInPkg(), Label: v.Name,
+			CountFiles: len(v.ChildFiles), CountFuncs: len(v.ChildFuncs), CountImports: len(v.ChildImports),
+			CountInterfaces: len(v.ChildInterfaces), CountMethods: len(v.ChildMethods), CountStructs: len(v.ChildStructs),
+			})
+		piSt[v.Name] = i
+
+		fmt.Printf("Setting '%v' \n", v.Name)
+ 	}
+
+	for i, v := range app.ChildPackages {
+		for _, vv := range v.ChildImports {
+
+			_, f := path.Split(strings.Replace(vv,`"`, "", -1))
+			if _, ok := piSt[f]; ok {
+				nm := fmt.Sprintf("%v-%v", i, piSt[f].(int))
+				uqLinks[nm] = Links{i, piSt[f].(int), "to"}
+			}
+		}
+	}
+
+	for _, v := range uqLinks {
+		pi.Links = append(pi.Links, v)
+	}
+
+	k, _ := json.Marshal(pi)
+	c.Writer.Write(k)
+}
+
+func loadDirs(c *gin.Context) {
+
+	var ret string
+
+	for _, v := range GetLocalRepos() {
+		ret += fmt.Sprintf(`<a href="?dir=%v">%v</a><br/>`, v, v)
+	}
+
+	c.Writer.Write([]byte(ret))
 }
 
 func showApp(c *gin.Context) {
 
+	d := c.Query("dir")
+
+	t := time.Now()
+	app = FetchApp( d )
+
+	fmt.Println("Time taken: %v", time.Now().Sub(t).Seconds())
+
+	c.Writer.Header().Set("Content-Type", "text/html")
 	var ret string
 	app.SortPackages()
 
@@ -31,34 +125,126 @@ func showApp(c *gin.Context) {
 <div class="package_header">
 Folder: %v <br/>
 Lines: %v  <br/>
-Child Files: %v - Funcs : %v - Methods: %v </div>`,
+Child Files: %v - 
+Funcs : %v, 
+Interfaces: %v, 
+Structs: %v, 
+Methods: %v,
+Unique Imports: %v
+</div>`,
 			pkgs.Name,
 			pkgs.FolderLocation,
 			pkgs.GetLinesInPkg(),
 			len(pkgs.ChildFiles),
 			len(pkgs.ChildFuncs),
+			len(pkgs.ChildInterfaces),
+			len(pkgs.ChildStructs),
 			len(pkgs.ChildMethods),
+			pkgs.UniqueImports(),
 		)
 
 		ret += `<div class="file_details">`
 
 		pkgs.SortFiles()
+
+		ret += `
+<div style="float:left;">
+<table class="table" style="width: 500px;"><th>
+<tr>
+<td>File</td>
+<td>Action</td>
+<td>Loc</td>
+<td>Imports</td>
+<td>Funcs</td>
+<td>Structs</td>
+<td>Interfaces</td>
+<td>Methods</td>
+</tr>
+`
 		for _, file := range pkgs.ChildFiles {
 
-			ret += fmt.Sprintf("<b>%v</b> File: %v </br>", file.Name, file.NumberLines)
+			var str string
+
+			for _, v := range file.Structs {
+				str += "" + url.QueryEscape(v.Content) + "</br>"
+			}
+
+			mn := ""
+
+			if file.HasMainFunc {
+				mn = `<span class="glyphicon glyphicon-star toltip" style="color: orange;">
+<span class="tooltiptext">Has a main function</span>
+</span>`
+			}
+
+			if file.InitFuncCount > 0 {
+
+				mn += fmt.Sprintf(`<span class="glyphicon glyphicon-italic toltip" style="color: blue;">
+<span class="tooltiptext">Has init function</span>
+</span>`)
+			}
+
+			ret += fmt.Sprintf(`<tr> 
+<td><b>%v</b></td>
+<td class="cnt">%v</td>
+<td class="cnt">%v</td>
+<td class="cnt">%v</td> 
+<td class="cnt"> %v </td> 
+<td class="cnt"> <div class="structCount" data="%v">%v
+</div> </td> <td class="cnt"> %v </td> <td class="cnt"> %v </td></tr>`,
+				 file.Name,
+				 mn,
+				 file.NumberLines,
+				 len(file.Imports),
+				 len(file.Funcs), str, len(file.Structs),
+				 len(file.Interfaces), len(file.Methods))
 		}
 
-		ret += `</div>`
+		ret += "</table>"
+
+		ret += `
+</div>
+<div class="file_details_inside" style="float:left; padding: 15px; width: 580px; overflow: scroll;">
+</div>
+<div style="clear:both"></div>
+</div>`
 	}
+
+//	gd, _ := json.Marshal(app.GraphData)
+
+//	ret += fmt.Sprintf(`<script>
+//	(function a(){
+//	window.graphData = %v;
+//
+//	// create an array with nodes
+//	var nodes = new vis.DataSet(window.graphData.data);
+//	// create an array with edges
+//	var edges = new vis.DataSet(window.graphData.links);
+//
+//	// create a network
+//	var container = document.getElementById("mynetwork");
+//	var data = {
+//		nodes: nodes,
+//		edges: edges
+//	};
+//
+//	var options = {
+//		nodes: {
+//			shape: "dot"
+//		} };
+//
+//	var network = new vis.Network(container, data, options);
+//
+//
+//
+//})();
+//</script>`, string(gd))
+
 
 	ret += "</body></html>"
 
 	c.Writer.Write([]byte(ret))
 }
-
-
-
-
 
 type JsonOut struct {
 

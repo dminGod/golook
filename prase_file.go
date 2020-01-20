@@ -12,6 +12,13 @@ import (
 	"sort"
 )
 
+
+/*
+Set the BaseFolder
+Get all the subdirectories in the folder and set them as the SubFolder
+Return the application
+ */
+
 func NewApplication(baseFolder string) (RetApp Application) {
 
 	RetApp.BaseFolder = baseFolder
@@ -19,6 +26,8 @@ func NewApplication(baseFolder string) (RetApp Application) {
 
 	return
 }
+
+// Make a package - Loop over each file of the package and call LoadFile on the file
 
 func ParsePackage(a *Application, fileSet *token.FileSet, folder string, pkg *ast.Package) (retPkg *PackageInfo) {
 
@@ -33,14 +42,23 @@ func ParsePackage(a *Application, fileSet *token.FileSet, folder string, pkg *as
 
 	// Loop over the files
 	for _, f := range pkg.Files {
+
 		tmFile := LoadFile( retPkg, f )
-		retPkg.ChildFiles = append(retPkg.ChildFiles, tmFile)
+
+		if strings.HasSuffix(tmFile.Name, "_test.go") == false {
+
+			retPkg.ChildFiles = append(retPkg.ChildFiles, tmFile)
+		} else {
+
+			retPkg.ChildTests = append(retPkg.ChildFiles, tmFile)
+		}
 	}
 
 	// TODO: Map the methods and structs here
-
 	return
 }
+
+// Sort the packages based on the line size of the package
 
 func (a *Application) SortPackages() {
 
@@ -51,15 +69,31 @@ func (a *Application) SortPackages() {
 	return
 }
 
-
+// Main function that reads the whole application
 
 func FetchApp(dir string) (RetApp Application) {
 
 	RetApp = NewApplication(dir)
 	RetApp.ReadApp()
 
+
+	err := addApp(RetApp)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	x := getApp(RetApp.Name)
+
+	fmt.Println(x, "<-- Parsed application")
 	return
 }
+
+// Loop over each subfolder
+// Get the packages in the subfolder
+// Loop over the packages
+// For each package, parse every file and load the details on the file level
+// populate the data on the package level
+// populate the data of the packages on the application level
 
 func (a *Application) ReadApp() (err error) {
 
@@ -111,9 +145,41 @@ func (a *Application) ReadApp() (err error) {
 		}
 	}
 
+
+	var pi PkgImports
+
+	piSt := make(map[string]interface{})
+	uqLinks := make(map[string]Links)
+
+	for i, v := range a.ChildPackages {
+		pi.Data = append(pi.Data, PkgNames{ID: i, Value: v.GetLinesInPkg(), Label: v.Name,
+			CountFiles: len(v.ChildFiles), CountFuncs: len(v.ChildFuncs), CountImports: len(v.ChildImports),
+			CountInterfaces: len(v.ChildInterfaces), CountMethods: len(v.ChildMethods), CountStructs: len(v.ChildStructs)})
+		piSt[v.Name] = i
+
+		fmt.Printf("Setting '%v' \n", v.Name)
+	}
+
+	for i, v := range a.ChildPackages {
+		for _, vv := range v.ChildImports {
+
+			_, f := path.Split(strings.Replace(vv,`"`, "", -1))
+			if _, ok := piSt[f]; ok {
+				nm := fmt.Sprintf("%v-%v", i, piSt[f].(int))
+				uqLinks[nm] = Links{i, piSt[f].(int), "to"}
+			}
+		}
+	}
+
+	for _, v := range uqLinks {
+		pi.Links = append(pi.Links, v)
+
+	}
+
+	a.GraphData = pi
+
 	return
 }
-
 
 func (p *PackageInfo) GetLinesInPkg() (lns int){
 
@@ -173,6 +239,16 @@ func (f *FileInfo) Parse() {
 			fd := decl.(*ast.FuncDecl)
 			fc := fd.Name.Name[:1]
 			funcName := fd.Name.Name
+
+
+			if funcName == "main" {
+				f.HasMainFunc = true
+			}
+
+			if funcName == "init" {
+				f.InitFuncCount += 1
+			}
+
 			isPublic := fc == strings.ToUpper(fc)
 
 			strName := ""
@@ -218,7 +294,7 @@ func (f *FileInfo) Parse() {
 				f.Methods = append(f.Methods, &meth)
 				f.PackageInfo.ChildMethods = append(f.PackageInfo.ChildMethods, &meth)
 
-			} else {
+			}  else {
 
 				tmRole := PriFunctionCompType
 
@@ -244,48 +320,136 @@ func (f *FileInfo) Parse() {
 			switch decl.(*ast.GenDecl).Tok {
 
 			case token.TYPE:
-
 				nm := decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec).Name.Name
 
 				var st, en int
-				//var con string
+				var con string
 
 				st = (f.PackageInfo.FileSet.Position(decl.Pos()).Line - 1)
 				en = (f.PackageInfo.FileSet.Position(decl.End()).Line)
 				sz := en - st
 
-				//if decl.Pos() != decl.End() {
-				//	con = strings.Join(retLines(f.Lines, st, en), "\n")
-				//} else {
-				//	st = (f.PackageInfo.FileSet.Position(decl.Pos()).Line - 1)
-				//	con = retLine(f.Lines, st)
+				if decl.Pos() != decl.End() {
+					con = strings.Join(retLines(f.Lines, st, en), "\n")
+				} else {
+					st = (f.PackageInfo.FileSet.Position(decl.Pos()).Line - 1)
+					con = retLine(f.Lines, st)
+				}
+
+
+				//switch decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec).Type.(type) {
+				//
+				//case *ast.StructType:
+				//	fmt.Printf("Struct Type %+v  -- Type %+v - Name : %v - File : %v \n",
+				//		decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec),
+				//		reflect.TypeOf(decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec).Type).String(),
+				//		decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec).Name.Name,
+				//		f.Name,
+				//		)
+				//
+				//case *ast.InterfaceType:
+				//	//fmt.Printf("Interface Type %+v  -- Type %+v - Name : %v - File : %v  \n",
+				//		decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec),
+				//		reflect.TypeOf(decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec).Type).String(),
+				//		decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec).Name.Name,
+				//		f.Name,
+				//		)
+				//
+				//case *ast.ArrayType:
+				//	fmt.Printf("Array Type %+v  -- Type %+v - Name : %v - File : %v  \n",
+				//		decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec),
+				//		reflect.TypeOf(decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec).Type).String(),
+				//		decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec).Name.Name,
+				//		f.Name,
+				//		)
+				//
+				//case *ast.Ident:
+				//	fmt.Printf("Identity Type %+v  -- Type %+v - Name : %v - File : %v  \n",
+				//		decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec),
+				//		reflect.TypeOf(decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec).Type).String(),
+				//		decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec).Name.Name,
+				//		f.Name,
+				//		)
+				//
+				//case *ast.MapType:
+				//	fmt.Printf("MapType Type %+v  -- Type %+v - Name : %v - File : %v  \n",
+				//		decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec),
+				//		reflect.TypeOf(decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec).Type).String(),
+				//		decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec).Name.Name,
+				//		f.Name,
+				//		)
+				//
+				//case *ast.FuncType:
+				//	fmt.Printf("Func Type %+v  -- Type %+v - Name : %v - File : %v  \n",
+				//		decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec),
+				//		reflect.TypeOf(decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec).Type).String(),
+				//		decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec).Name.Name,
+				//		f.Name,
+				//	)
+				//
+				//default:
+				//	fmt.Printf("********* Unknow Type %+v  -- Type %+v - Name : %v - File : %v  \n",
+				//		decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec),
+				//		reflect.TypeOf(decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec).Type).String(),
+				//		decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec).Name.Name,
+				//		f.Name,
+				//	)
+				//
 				//}
+
 
 				isPublic := nm[:1] == strings.ToUpper(nm[:1])
 
-				role := PriStructCompType
+				if reflect.TypeOf(decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec).Type).String() == "*ast.InterfaceType" {
 
-				if isPublic {
-					role = PubStructCompType
-				}
+					role := PriInterfacesCompType
 
-				str := StructInfo{
-					Name: nm,
-					Role: role,
-					Package: f.PackageInfo,
-					Application: f.PackageInfo.ParentApp,
-					File: f,
-					NumberLines: sz,
-
+					if isPublic {
+						role = PubInterfacesCompType
 					}
 
-				f.Structs = append(f.Structs, &str)
-				f.PackageInfo.ChildStructs = append(f.PackageInfo.ChildStructs, &str)
+					meth := InterfaceInfo{
+						Name:        decl.(*ast.GenDecl).Specs[0].(*ast.TypeSpec).Name.Name,
+						Application: f.PackageInfo.ParentApp,
+						Package:     f.PackageInfo,
+						File:        f,
+
+						Role:    role,
+						NumberLines: sz,
+					}
+
+					f.Interfaces = append(f.Interfaces, &meth)
+					f.PackageInfo.ChildInterfaces = append(f.PackageInfo.ChildInterfaces, &meth)
+
+				} else {
+
+					role := PriStructCompType
+
+					if isPublic {
+						role = PubStructCompType
+					}
+
+					str := StructInfo{
+						Name: nm,
+						Role: role,
+						Package: f.PackageInfo,
+						Application: f.PackageInfo.ParentApp,
+						File: f,
+						NumberLines: sz,
+						Content: con,
+						}
+
+					f.Structs = append(f.Structs, &str)
+					f.PackageInfo.ChildStructs = append(f.PackageInfo.ChildStructs, &str)
+
+				}
+
 
 			case token.IMPORT:
 				for _, vv := range decl.(*ast.GenDecl).Specs {
 
 					f.PackageInfo.ChildImports = append(f.PackageInfo.ChildImports, vv.(*ast.ImportSpec).Path.Value)
+					f.Imports = append(f.Imports, vv.(*ast.ImportSpec).Path.Value)
 				}
 
 			case token.VAR:

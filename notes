@@ -1,0 +1,112 @@
+
+
+Folder: /opt/go_code/src/github.com/dminGod/golook
+Lines: 1030
+Child Files: 8 - Funcs : 21 - Methods: 17
+
+
+// Entry into the application: (This is of importance) -- Package main, func main()
+golook.go File: 30
+
+    // Get flags -- parse them
+    // Set some default bool flags
+
+    // Call FetchApp() to get the application struct
+        // Call NewApplication to set the base dir and all the sub directories of the application
+        // Call ReadApp
+            // Loop over each subfolder
+                // Find the packages that are part of this directory (should have only one if set correct)
+                // Parse the directory using parse.ParseDir
+                // Loop over the pkgs
+                    // Make a temp package
+                        // Loop over each file, call the ReadFile
+                            // Make a FileInfo struct and call a Parse() function on it
+                                // The parse function will loop over each AstFile.declaration -- identify the type of declaration it is
+                                    // For a function and method make an object and append it on the package level
+                                    // For other types also append them in the correct type
+
+                                    // Func, Method, Type declaration, Import, Variable, Constant
+
+                   // Append all the methods, funcs, files, imports on the main application level also
+
+
+        // Call StartUI
+            // Load gin, set all the paths, load the webserver on 8081
+
+
+    func main(){
+
+
+
+    func collectStats(){
+
+
+// Has all the structs with the relationships between each other
+// Application is the main parent
+    // SubFolders
+    // Packages
+        // FilesInfo
+        // Structs
+        // Methods
+        // Funcs
+
+mainStructs.go File: 100
+    func (p *PackageInfo) SortFiles(){
+
+
+
+prase_file.go File: 310
+    func NewApplication(baseFolder string) (RetApp Application)
+    func ParsePackage(a *Application, fileSet *token.FileSet, folder string, pkg *ast.Package) (retPkg *PackageInfo)
+    func (a *Application) SortPackages()
+    func FetchApp(dir string) (RetApp Application)
+    func (a *Application) ReadApp() (err error)
+    func (p *PackageInfo) GetLinesInPkg() (lns int)
+    func LoadFile(pkgInfo *PackageInfo, f *ast.File) (file *FileInfo)
+    func (f *FileInfo) Parse()
+
+structs.go File: 177
+    func (a *PackageInfo) ParseFolder() {
+    func (a *Application) GetRole() (ct ComponentType) {
+    func (a *Application) GetStats() (ret map[ComponentType]int) {
+    func (a *PackageInfo) GetRole() (ct ComponentType) {
+    func (p *PackageInfo) GetStats() (ret map[ComponentType]int) {
+    func (a *FileInfo) GetRole() (ct ComponentType) {
+    func (p *FileInfo) GetStats() (ret map[ComponentType]int) {
+    func (a *MethodInfo) GetRole() (ct ComponentType) {
+    func (p *MethodInfo) GetStats() (ret map[ComponentType]int) {
+    func (a *FuncInfo) GetRole() (ct ComponentType) {
+    func (p *FuncInfo) GetStats() (ret map[ComponentType]int) {
+    func IsPublic(c Component) (b bool) {
+    func GetStats(c Component) (res map[ComponentType]int) {
+
+show_app.go File: 156
+    func StartUI() {
+    func showApp(c *gin.Context) {
+    func jsonFS(c *gin.Context) {
+    func jsonPackageSize(c *gin.Context) {
+    func jsonMethodFuncs(c *gin.Context) {
+
+load_data.go File: 120
+    func filesFilterFunc(f os.FileInfo) (ret bool) {
+    func SortReturnImports(imports map[string]struct{})(ret []string) {
+    func FindTypes(v ast.Node) ast.Visitor {
+    type VisitorFunc func (ast.Node) ast.Visitor
+    func (f VisitorFunc) Visit(n ast.Node) ast.Visitor { return f(n) }
+
+
+utils.go File: 74
+    func GetAllSubDirs(base string) (s []string) {
+
+    // This is the last layer you need to return back the function
+    // These functions may be useful for getting data out in some place
+    func retLines(r []string, par int, end int) (ret []string){
+    func retLine(r []string, parm int) (ret string){
+
+config.go File: 63
+    func getFlags() {
+    func setDefaults(){
+
+
+
+

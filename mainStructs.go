@@ -8,7 +8,7 @@ import (
 
 type Application struct {
 
-	Name       string
+	Name       string		`boltholdKey:"name"`
 	BaseFolder string
 	SubFolders []string
 
@@ -16,7 +16,10 @@ type Application struct {
 	ChildFiles    []*FileInfo
 	ChildStructs  []*StructInfo
 	ChildMethods  []*MethodInfo
+	ChildInterfaces []*InterfaceInfo
 	ChildFuncs    []*FuncInfo
+
+	GraphData     PkgImports
 }
 
 type PackageInfo struct {
@@ -30,9 +33,24 @@ type PackageInfo struct {
 
 	ChildImports []string
 	ChildFiles   []*FileInfo
+	ChildTests   []*FileInfo
 	ChildStructs []*StructInfo
 	ChildMethods []*MethodInfo
+	ChildInterfaces []*InterfaceInfo
 	ChildFuncs   []*FuncInfo
+}
+
+func (p *PackageInfo) UniqueImports() (int){
+
+	var st map[string]interface{}
+
+	st = make(map[string]interface{})
+
+	for _, v := range p.ChildImports {
+		st[v] = nil
+	}
+
+	return len(st)
 }
 
 func (p *PackageInfo) SortFiles(){
@@ -53,11 +71,33 @@ type FileInfo struct {
 	Structs 	[]*StructInfo
 	Methods     []*MethodInfo
 	Funcs       []*FuncInfo
+	Interfaces  []*InterfaceInfo
+	Imports     []string
+
+	HasMainFunc bool
+	InitFuncCount   int
 
 	Lines 		[]string
 	PackageInfo *PackageInfo
 	AstPackage  *ast.Package
 	Application *Application
+}
+
+
+
+type InterfaceInfo struct {
+
+	Name    string
+	Content string
+	StructName  string
+
+	Role    ComponentType
+
+	NumberLines int
+	Application *Application
+	Package     *PackageInfo
+	Stuct       *StructInfo
+	File        *FileInfo
 }
 
 type MethodInfo struct {

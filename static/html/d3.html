@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style> /* set the CSS */
+
+        body { font: 12px Arial;}
+
+        path {
+            stroke: steelblue;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: grey;
+            stroke-width: 1;
+            shape-rendering: crispEdges;
+        }
+
+        div.tooltip {
+            position: absolute;
+            text-align: center;
+            width: 60px;
+            height: 28px;
+            padding: 2px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+    </style>
+
+
+
+</head>
+<body>
+
+<svg>
+</svg>
+<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script>
+
+    var svg = d3.select("svg");
+
+    // Define the div for the tooltip
+    var div = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+    svg.append("rect").attr("width", 400).attr("height", 300).attr("fill", "grey").attr("")
+
+    var g = svg.selectAll("g")
+        .data([150, 57, 293], function(d) { return d; });
+
+    gr = g.enter().append("g")
+        .on("mouseover", function(d) {
+        div.transition()
+            .duration(200)
+            .style("opacity", .9);
+        div	.html(d)
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 28) + "px")
+
+        })
+        .on("mouseout", function(d) {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+
+    gr.append("circle")
+        .attr("cy", 60)
+        .attr("cx", function(d, i) { return i * 100 + 30; })
+        .attr("r", function(d) { return Math.sqrt(d); });
+
+    gr.append("text")
+        .attr("x", function(d, i) { return i * 100 + 20; })
+        .attr("y", 60)
+        .attr("dy", ".75em")
+        .text(function(d) { return d; })
+        .style("fill", "white")
+
+    /*    g.enter().append("circle")
+        .attr("cy", 60)
+        .attr("cx", function(d, i) { return i * 100 + 30; })
+        .attr("r", function(d) { return Math.sqrt(d); });
+*/
+/*    g.append("text")
+        .attr("text", function(d) { return d });*/
+
+    g.exit().remove();
+
+</script>
+
+</body>
+</html>

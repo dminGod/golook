@@ -28,7 +28,6 @@ func getFlags() {
 	flag.Parse()
 }
 
-
 // Set the defaults if you are running it directly from the IDE
 func setDefaults(){
 

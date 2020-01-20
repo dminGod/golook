@@ -1,104 +1,79 @@
-go
+
+
+- Handle JSON objects on the HTML
+- Make the responses in json rather than html directly.
+- Remove the HTML code from the golang code
+
+- Save the generated struct into a boltdb file map[folder string] to boltdb object.
+- See if you are able to just use the reference directly from the boltdb file.
+
+
+- Internal imports vs external imports -- What is the application package
+
+- Show the stats on the number of imports
+    - Make a unique imports array on the package level or after the application parse make the slice unique
+    - Imports internal : count
+    - Imported by internally : count
+    - Imports golang libs
+    - Imports external libs
+
+
+- Show the stats on how many times the particular struct is used in other places.
+
+- Stats on how many tests are written on this application
+  - Number of test files
+  - Number of test functions
+  - Lines of Code of tests
+
+
+
+- Separate the interface from the structs
 
 
 
 
 
 
-- What are the actual parts of this application?
-- What does this application do?
 
 
-What are the ComponentTypes?
-Why have you implemented an interface for Component?
-    // Where are you using this interface?
+Circle is the size of the actual package
+Smaller dots of the size of the lines of code of different colors
 
 
 
-golook.go
-- Call the 2 config functions: getFlags, setDefaults
-- Call FetchApp
 
 
-config.go
-getFlags -- Gets these flags:
-    dir "The directory of the code"
-    use_test_files "Also parses _test.go files if set to true -- its set to false by default")
-    short_view "To show limited results -- Shows only what you specify with other flags (like show_struct, show_public_funcs etc.
-    show_import "Shows only imports used -- Set to true by default
-    show_struct "Shows only the struct definitions -- Set to true by default
-    show_struct_methods "Shows struct methods  -- Set to true by default
-    show_funcs, false "Shows all functions -- Set to true by default
-    show_funcs_public false, "Shows public functions -- Set to true by default
-    show_funcs_private false, "Shows private functions -- Set to true by default
-    short_struct "Shows only the first line of the struct -- Set to false by default
-
-setDefaults:
-    - set the CWD
-    - set the flag as limited view or not
-
-load_data.go
-
-mainStructs.go
-  - Application, the main application object that has a lot of other things
-     attached to it.
-  - PackageInfo, has
 
 
-parse_file.go
-  NewApplication:
-    - On the application object it sets the base folder
-    - It parses and gets all the subfolders recursively and adds them to the object.
-        - The main object is also added to this subfolder []string
-
-  FetchApp -
-    - Creates a Application passing the dir
-    - Calls ReadApp on it
-
-  ReadApp -
-    - Loop over all the subfolders:
-      - Create a new fileset
-      - Make a map[string]*ast.package
-      - Get the list of packages in the current directory using the ParseDir function
-      - Loop over the packages
-        - Call ParsePackage on the current package -- Put them into
-        - Get all the files that are part of this package:
-          Call LoadFile for each of them
-          - Get the file name and path details
-          - Read the actual file
-          - Collect information about the file (name, location, number of lines, size, actual number of lines in the file)
-
-            Call parse on each file -- Collect info on file level and return
-            For the package add that file reference
-
-                Loop over the declarations f.AstFile.Decls
-                    What type of declaration is this?
-                        - Function declaration:
-                          Is this function a method?
-                          When does this start, when does it end, what is the size?
-                          Is it public or private?
-
-                          If its a method collect related info put them in the childmethods
-                          for functions put them in childfuncs
-
-                        - Generic declaration (import, constant, type or variable
-                            - Is it a type declaration?
-                              - Add the reference to this on the ChildStructs
-                            - Is this an Import?
-                              - Add it to the child imports
-                            - Variable declaration? Constant declaration, do nothing
-                        - Nothing, catchall
 
 
-            For each package:
-                - From the Files, Structs, Methods and Funcs we collected
-                 add them to the application level
-
-show_app.go
-
-structs.go
 
 
-utils.go
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

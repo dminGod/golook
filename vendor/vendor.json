@@ -1,0 +1,73 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "aBVn0PyF7T94wMFCcnexyLqz35c=",
+			"path": "github.com/antigloss/go/logger",
+			"revision": "3979ddb0d2736dbcbccfa66d0cab3403e909946b",
+			"revisionTime": "2018-05-08T05:51:55Z"
+		},
+		{
+			"checksumSHA1": "D4yMRpf/jYHohWuK22QmLT6n/YY=",
+			"path": "github.com/gocql/gocql",
+			"revision": "181004e14a3fb735efcc826a4256369d0c96747b",
+			"revisionTime": "2018-05-06T18:46:54Z"
+		},
+		{
+			"checksumSHA1": "7RlYIbPYgPkxDDCSEuE6bvYEEeU=",
+			"path": "github.com/gocql/gocql/internal/lru",
+			"revision": "181004e14a3fb735efcc826a4256369d0c96747b",
+			"revisionTime": "2018-05-06T18:46:54Z"
+		},
+		{
+			"checksumSHA1": "puCAbQOdeajpTEFssPsgeskXB+8=",
+			"path": "github.com/gocql/gocql/internal/murmur",
+			"revision": "181004e14a3fb735efcc826a4256369d0c96747b",
+			"revisionTime": "2018-05-06T18:46:54Z"
+		},
+		{
+			"checksumSHA1": "tZQDfMMTKrYMXqen0zjJWLtOf1A=",
+			"path": "github.com/gocql/gocql/internal/streams",
+			"revision": "181004e14a3fb735efcc826a4256369d0c96747b",
+			"revisionTime": "2018-05-06T18:46:54Z"
+		},
+		{
+			"checksumSHA1": "p/8vSviYF91gFflhrt5vkyksroo=",
+			"path": "github.com/golang/snappy",
+			"revision": "553a641470496b2327abcac10b36396bd98e45c9",
+			"revisionTime": "2017-02-15T23:32:05Z"
+		},
+		{
+			"checksumSHA1": "O0r0hj4YL+jSRNjnshkeH4GY+4s=",
+			"path": "github.com/hailocab/go-hostpool",
+			"revision": "e80d13ce29ede4452c43dea11e79b9bc8a15b478",
+			"revisionTime": "2016-01-25T11:53:50Z"
+		},
+		{
+			"checksumSHA1": "KT7rv91mVr1RoJEvVdzlp+ybMbg=",
+			"path": "github.com/timshannon/bolthold",
+			"revision": "ccb01ed9dec4272145c1e7fa5c2970bc9ff63ce8",
+			"revisionTime": "2019-10-09T16:11:17Z"
+		},
+		{
+			"checksumSHA1": "9VCT03G1QYtkpnzbRf+LWrX+oeA=",
+			"path": "go.etcd.io/bbolt",
+			"revision": "7ee3ded59d4835e10f3e7d0f7603c42aa5e83820",
+			"revisionTime": "2018-09-12T20:56:54Z"
+		},
+		{
+			"checksumSHA1": "gwqhvBrWoX90tveQMNJ4d/nPOMk=",
+			"path": "golang.org/x/sys/unix",
+			"revision": "62eef0e2fa9b2c385f7b2778e763486da6880d37",
+			"revisionTime": "2018-11-22T14:36:24Z"
+		},
+		{
+			"checksumSHA1": "COfXAfInbcFT/YRsvLUQnNKHzF0=",
+			"path": "gopkg.in/inf.v0",
+			"revision": "d2d2541c53f18d2a059457998ce2876cc8e67cbf",
+			"revisionTime": "2018-03-26T17:23:32Z"
+		}
+	],
+	"rootPath": "github.com/dminGod/CassKafakFailHandle"
+}
