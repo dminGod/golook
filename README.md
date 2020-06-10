@@ -21,11 +21,11 @@ Now when you visit : http://127.0.0.1:8081/static/html
 
 You will see something like this:
 
-![top chart](https://raw.githubusercontent.com/dminGod/golook/master/static/top_section.jpg) 
+![top chart](https://raw.githubusercontent.com/dminGod/golook/master/static/top_section.png) 
 
-![example](https://raw.githubusercontent.com/dminGod/golook/master/static/main_section.jpg)  
+![example](https://raw.githubusercontent.com/dminGod/golook/master/static/main_section.png)  
  
-![example2](https://raw.githubusercontent.com/dminGod/golook/master/static/main_section2.jpg)  
+![example2](https://raw.githubusercontent.com/dminGod/golook/master/static/main_section2.png)  
 
 
 
