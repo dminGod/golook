@@ -246,7 +246,22 @@
 
 
 
+        $('body').on('click', '.funcsCount', function() {
+
+            txt = "<pre>" + urldecode($(this).attr("data")) + "</pre>";
+            $(this).parents(".file_details").find(".file_details_inside").html(txt);
+        });
+
+
+
+        $('body').on('click', '.importCount', function() {
+
+            txt = "<pre>" + urldecode($(this).attr("data")) + "</pre>";
+            $(this).parents(".file_details").find(".file_details_inside").html(txt);
+        });
+
         $('body').on('click', '.structCount', function() {
+
             txt = "<pre>" + urldecode($(this).attr("data")) + "</pre>";
             $(this).parents(".file_details").find(".file_details_inside").html(txt);
         });

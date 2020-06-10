@@ -1,12 +1,11 @@
 package main
 
 import (
-"golang.org/x/tools/godoc/vfs"
+// "golang.org/x/tools/godoc/vfs"
 )
 
+func Ab() {
 
-func Ab(){
-
-	var a := vfs.FileSystem
+	// var a := vfs.FileSystem
 
 }

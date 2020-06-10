@@ -4,6 +4,8 @@
 - Make the responses in json rather than html directly.
 - Remove the HTML code from the golang code
 
+
+
 - Save the generated struct into a boltdb file map[folder string] to boltdb object.
 - See if you are able to just use the reference directly from the boltdb file.
 
@@ -30,7 +32,32 @@
 - Separate the interface from the structs
 
 
+Purpose of this application is:
+"
+There is no way to look at your code from a higher level perspective -- see it from a higher place where you can
+see the bigger picture of the application -- If you were trying to contribute to say Kubernetes and you wanted to
+make sense of what the application was -- what are the big meatier chunks -- what are the most imported packages
+-- what are the most used types across the application.
 
+Like analytics about the application that lets you see what is going on with the app
+
+Couple that with actual documentation of the application.
+
+
+Can you move a slider and take the commits to the past and do a calculation of what was the situation at that point?
+
+When was this module started and when was the last commit to this module
+
+How many stars does this repository have?
+
+Click on the imported modules to open a review of those modules.
+
+
+Save all the content of the parsed responses in a DB so you can review it
+
+
+
+"
 
 
 

@@ -20,8 +20,12 @@ Couple of examples of what it looks like:
 Now when you visit : http://127.0.0.1:8081/static/html   
 
 You will see something like this:
+
+![top chart](https://raw.githubusercontent.com/dminGod/golook/master/static/top_section.jpg) 
+
+![example](https://raw.githubusercontent.com/dminGod/golook/master/static/main_section.jpg)  
  
-![docker example](https://raw.githubusercontent.com/dminGod/golook/master/static/example.jpg)
+![example2](https://raw.githubusercontent.com/dminGod/golook/master/static/main_section2.jpg)  
 
 
 

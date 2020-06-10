@@ -1,0 +1,59 @@
+[
+  {
+  "application" : [
+  {
+    "pkg_name": "",
+    "folder_location": "",
+    "pkg_lines_of_code" : 50,
+    "pkg_files_count": 10,
+    "pkg_funcs_count": 10,
+    "pkg_interfaces_count": 10,
+    "pkg_structs_count": 10,
+    "pkg_methods_count": 10,
+    "pkg_unique_imports_count": 10,
+    "pkg_imported_in_other_pkgs_count": 7,
+
+    "pkg_imported_in_other_pkgs_ref": [ "github.com/hello", "github.com/hello", "github.com/hello" ],
+
+    "pkg_imports_ref": [
+      { "import": "github.com/hello", "import_type" : "same_app|external|golang", "number_of_imports": 10  },
+      { "import": "github.com/hello1", "import_type" : "same_app|external|golang", "number_of_imports":  3 },
+      { "import": "github.com/hello2", "import_type" : "same_app|external|golang", "number_of_imports":  2 }
+    ],
+
+    "pkg_files" : [
+      {
+        "file_name": "viper.go",
+        "action_tags" : ["init"],
+        "file_loc" : 50,
+        "imports_count": 20,
+        "funcs_count": 10,
+        "structs_count": 10,
+        "interface_count": 10,
+        "methods_count": 10,
+        "imports_ref": [
+          {"import": "github.com/hello", "import_type" : "same_app|external|golang"},
+          {"import": "github.com/hello1", "import_type" : "same_app|external|golang"},
+          {"import": "github.com/hello2", "import_type" : "same_app|external|golang"}
+        ],
+        "structs_ref": [
+          {"struct": "struct_name", "methods": ["methodName"]}
+        ],
+        "interfaces_ref": ["interface_name"],
+        "methods_ref" : {
+          ["methodName"]
+          }
+        },
+          {},
+          {},
+        ]
+      },
+      {}
+    ]
+  }
+
+
+  ]
+
+
+
