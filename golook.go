@@ -1,31 +1,26 @@
 package main
 
-var dir string
+import (
+	"github.com/dminGod/golook/parsers"
+	"github.com/dminGod/golook/web"
+)
 
+var FileList []parsers.FuncInfo
 
-var FileList []FuncInfo
+var app parsers.Application
 
-var app Application
+func main() {
 
-func main(){
+	parsers.GetFlags()
 
-	getFlags()
-
-	initLocalDB()
+	parsers.InitLocalDB()
 	//runDebug()
-	setDefaults()
+	parsers.SetDefaults()
 
 	// Start the UI frontend
-	StartUI()
+	web.StartUI()
 }
 
-func runDebug(){
-
-
-
+func runDebug() {
 
 }
-
-
-
-

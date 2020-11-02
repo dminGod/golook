@@ -1,0 +1,148 @@
+
+Main Structs:
+    Application
+        -> PackageInfo
+            -> FileInfo (StructInfo, MethodInfo, FuncInfo, InterfaceInfo)
+
+    Application
+        PackageInfo
+        FuncInfo
+        StructInfo
+        InterfaceInfo
+        FuncInfo
+        PkgImports
+
+    PackageInfo
+        FileInfo
+        StructInfo
+        MethodInfo
+        InterfaceInfo
+        FuncInfo
+
+        PackageInfo.UniqueImports
+        PackageInfo.SortFiles
+
+    FileInfo
+        StructInfo
+        MethodInfo
+        FuncInfo
+        InterfaceInfo
+
+
+parse_file.go
+    FetchApp - LOC: 16
+        - Main function that reads the whole application
+        - Calls NewApplication, app.ReadApp()
+
+    LoadFile - LOC: 29
+
+    ParsePackage - LOC: 28
+
+    NewApplication - LOC: 7
+        - Set the basefolder
+        - Recursively add all the subfolders found on the app.
+
+    Method:
+        Application.ReadApp
+            - Loop over each subfolder
+            - Get the packages in the subfolder
+            - Loop over the packages
+            - For each package, parse every file and load the details on the file level
+            - populate the data on the package level
+            - populate the data of the packages on the application level
+
+        FileInfo.Parse
+            - Main method where the file level processing is done
+            - Each declaration of the parsed file is looped over
+            - Details are collected in the structs. Stats are added to the particular level.
+
+        Application.SortPackages
+            - Sort packages based on loc (very simple func)
+
+        Application.GetLinesInPkg
+            - Loop over the files, add the number of lines (Very small func)
+
+show_app.go - A file to
+    showApp - LOC: 148
+        - Get the request from the front-end - collect "dir" details
+        - Loop over the child packages
+            - Loop over the child files
+            (Make HTML for both)
+        - Send the response out
+
+    getPkgGraph - LOC: 39
+        - Get package graph response in json
+
+    jsonPackageSize - LOC: 25
+        - Json file sizes grouped by packages.
+
+    jsonFS - LOC: 24
+        - Json file size
+
+    jsonMethodFuncs - LOC: 21
+        - Json method, func and struct sizes
+
+    StartUI - LOC: 16
+        - Map the functions to the URLs in GIN
+        - Mention the listen IP and Port reference
+
+    loadDirs - LOC: 10
+        Get the local directories and show them
+    ~lots of html content in this file~
+
+structs.go
+    IsPublic - LOC: 14
+    GetStats - LOC: 5
+
+    type ComponentType int
+
+mainStructs.go
+    type Application struct
+    type PackageInfo struct
+    type FileInfo struct
+    type InterfaceInfo
+    type MethodInfo struct
+    type FuncInfo struct
+    type StructInfo struct
+
+load_data.go
+    FindTypes - LOC: 58
+    SortReturnImports - LOC: 25
+    filesFilterFunc - LOC: 11
+
+utils.go
+    GetAllSubDirs - LOC: 37
+    GetLocalRepos - LOC: 31
+    retLines - LOC: 10
+    retLine - LOC: 10
+
+local_db.go
+    initLocalDB - LOC: 12
+    getApp - LOC: 12
+    addApp - LOC: 10
+
+config.go
+    setDefaults - LOC: 17
+    getFlags - LOC: 7
+
+golook.go
+    main - LOC: 11
+    runDebug - LOC: 6
+
+godoc.go
+    Ab - LOC: 5
+
+
+
+
+
+
+Todo:
+- A page / tab that will show all the files with the functions and struct names sorted by the
+loc
+- Methods need to be linked on the page
+- Parsing needs to be done multiple times
+- Port for listen should be configurable
+
+- GetLocalRepos is hard-coded
+- Show the actual documentation for the functions and methods

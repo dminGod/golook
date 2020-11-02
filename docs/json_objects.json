@@ -1,7 +1,32 @@
 [
   {
-  "application" : [
-  {
+    "app_name" : "",
+    "app_path" : "",
+    "app_total_loc" : 0,
+    "app_files_count": 0,
+    "app_funcs_count": 0,
+    "app_interfaces_count": 0,
+    "app_structs_count": 0,
+    "app_methods_count": 0,
+    "app_unique_imports_count": 0,
+    "imports" : [
+        {
+          "import_path": "",
+          "packages_using_import": 0,
+          "files_using_import": 0,
+          "import_type": "internal|external|golang_native|unknown",
+        }
+      ],
+      "main_files": [
+        {
+          "file_path":"",
+          "file_name": "",
+          "package_name": "",
+          "file_loc" : 0
+        }
+      ],
+  "app_packages" : [
+    {
     "pkg_name": "",
     "folder_location": "",
     "pkg_lines_of_code" : 50,
@@ -12,15 +37,19 @@
     "pkg_methods_count": 10,
     "pkg_unique_imports_count": 10,
     "pkg_imported_in_other_pkgs_count": 7,
-
-    "pkg_imported_in_other_pkgs_ref": [ "github.com/hello", "github.com/hello", "github.com/hello" ],
-
-    "pkg_imports_ref": [
-      { "import": "github.com/hello", "import_type" : "same_app|external|golang", "number_of_imports": 10  },
-      { "import": "github.com/hello1", "import_type" : "same_app|external|golang", "number_of_imports":  3 },
-      { "import": "github.com/hello2", "import_type" : "same_app|external|golang", "number_of_imports":  2 }
+    "pkg_imported_in_other_pkgs_ref":
+    [
+      "github.com/hello",
+      "github.com/hello",
+      "github.com/hello"
     ],
-
+    "pkg_imports": [
+      {
+        "import": "github.com/hello",
+        "import_type" : "internal|external|golang|unknown",
+        "files_using_import": 10
+      }
+    ],
     "pkg_files" : [
       {
         "file_name": "viper.go",
@@ -32,9 +61,9 @@
         "interface_count": 10,
         "methods_count": 10,
         "imports_ref": [
-          {"import": "github.com/hello", "import_type" : "same_app|external|golang"},
-          {"import": "github.com/hello1", "import_type" : "same_app|external|golang"},
-          {"import": "github.com/hello2", "import_type" : "same_app|external|golang"}
+          {"import": "github.com/hello", "import_type" : "internal|external|golang|unknown"},
+          {"import": "github.com/hello1", "import_type" : "internal|external|golang|unknown"},
+          {"import": "github.com/hello2", "import_type" : "internal|external|golang|unknown"}
         ],
         "structs_ref": [
           {"struct": "struct_name", "methods": ["methodName"]}
@@ -47,13 +76,12 @@
           {},
           {},
         ]
-      },
-      {}
-    ]
+      }
+  ]
   }
 
 
-  ]
+]
 
 
 

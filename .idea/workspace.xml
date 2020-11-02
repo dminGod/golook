@@ -1,25 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="dcdab82d-2b53-4cf0-b86b-9af52d0595ed" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/Notes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/godoc.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/local_db.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/notes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/css/app.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/html/d3.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/notes-v2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/parsers/application.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/parsers/config.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/parsers/info_structs.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/parsers/package_info.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/parsers/parse_file.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/app_page.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/app_page_v2.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/define_urls.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/web_structs.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Notes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.sh" beforeDir="false" afterPath="$PROJECT_DIR$/build.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/json_objects.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/json_objects.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/godoc.go" beforeDir="false" afterPath="$PROJECT_DIR$/rough/godoc.gone" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/golook" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/golook.go" beforeDir="false" afterPath="$PROJECT_DIR$/golook.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/load_data.go" beforeDir="false" afterPath="$PROJECT_DIR$/load_data.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mainStructs.go" beforeDir="false" afterPath="$PROJECT_DIR$/mainStructs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prase_file.go" beforeDir="false" afterPath="$PROJECT_DIR$/prase_file.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/show_app.go" beforeDir="false" afterPath="$PROJECT_DIR$/show_app.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/html/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/static/html/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/todo" beforeDir="false" afterPath="$PROJECT_DIR$/todo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils.go" beforeDir="false" afterPath="$PROJECT_DIR$/utils.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/load_data.go" beforeDir="false" afterPath="$PROJECT_DIR$/parsers/load_data.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/local_db.go" beforeDir="false" afterPath="$PROJECT_DIR$/parsers/local_db.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mainStructs.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notes" beforeDir="false" afterPath="$PROJECT_DIR$/docs/notes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prase_file.go" beforeDir="false" afterPath="$PROJECT_DIR$/parsers/file_info.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/show_app.go" beforeDir="false" afterPath="$PROJECT_DIR$/web/web_show_app.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/structs.go" beforeDir="false" afterPath="$PROJECT_DIR$/rough/structs.gone" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.go" beforeDir="false" afterPath="$PROJECT_DIR$/parsers/utils.go" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,41 +62,42 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" path="/usr/lib/go-1.10" />
+  <component name="GOROOT" path="C:\Go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1TsEXEuEYU3iqAdh1tUX2owmvyf" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="GO_FMT" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.vendoring.notification.had.been.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\go_code\src\github.com\dminGod\golook\parsers" />
+      <recent name="D:\go_code\src\github.com\dminGod\golook\web" />
+      <recent name="D:\go_code\src\github.com\dminGod\golook\builds" />
+      <recent name="D:\go_code\src\github.com\dminGod\golook\rough" />
+      <recent name="D:\go_code\src\github.com\dminGod\golook\docs" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
@@ -102,20 +130,78 @@
       <method v="2" />
     </configuration>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="- Updated the UI - added json object reference" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Updated the UI - added json object reference" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="2517" height="192" key="GridCell.Tab.0.bottom" timestamp="1604298577382">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="192" key="GridCell.Tab.0.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1604298577382" />
+    <state width="2517" height="192" key="GridCell.Tab.0.center" timestamp="1604298577382">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="192" key="GridCell.Tab.0.center/0.0.2560.1040@0.0.2560.1040" timestamp="1604298577382" />
+    <state width="2517" height="192" key="GridCell.Tab.0.left" timestamp="1604298577381">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="192" key="GridCell.Tab.0.left/0.0.2560.1040@0.0.2560.1040" timestamp="1604298577381" />
+    <state width="2517" height="192" key="GridCell.Tab.0.right" timestamp="1604298577382">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="192" key="GridCell.Tab.0.right/0.0.2560.1040@0.0.2560.1040" timestamp="1604298577382" />
+    <state width="2517" height="495" key="GridCell.Tab.1.bottom" timestamp="1604124559350">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="495" key="GridCell.Tab.1.bottom/0.0.2560.1040@0.0.2560.1040" timestamp="1604124559350" />
+    <state width="2517" height="495" key="GridCell.Tab.1.center" timestamp="1604124559350">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="495" key="GridCell.Tab.1.center/0.0.2560.1040@0.0.2560.1040" timestamp="1604124559350" />
+    <state width="2517" height="495" key="GridCell.Tab.1.left" timestamp="1604124559350">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="495" key="GridCell.Tab.1.left/0.0.2560.1040@0.0.2560.1040" timestamp="1604124559350" />
+    <state width="2517" height="495" key="GridCell.Tab.1.right" timestamp="1604124559350">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state width="2517" height="495" key="GridCell.Tab.1.right/0.0.2560.1040@0.0.2560.1040" timestamp="1604124559350" />
+    <state x="986" y="253" width="587" height="534" key="find.popup" timestamp="1604122783443">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="986" y="253" width="587" height="534" key="find.popup/0.0.2560.1040@0.0.2560.1040" timestamp="1604122783443" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/parsers/application.go</url>
+          <line>149</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/web/app_page_v2.go</url>
+          <line>93</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
